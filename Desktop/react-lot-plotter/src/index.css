@@ -7,38 +7,38 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-/* src/application/components/DraggableForm.css */
-
-.draggable-form {
+.custom-dialog {
+  position: fixed;
+  top: 10%;
+  right: 23%;
+  width: 50vw;
+  background: white;
   border: 1px solid #ddd;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  position:fixed;
-  z-index: 1000; 
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 1001; /* Adjust to ensure it's above other content */
 }
 
-.header {
-  background-color: #f0f0f0;
-  padding: 8px;
+.custom-dialog-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.form-content {
-  padding: 16px;
-}
-
-.minimized-form {
-  background-color: yellow;
   padding: 10px;
-  cursor: pointer;
-  z-index: 1001; 
-  position: fixed;
-  bottom: 10px;
-  left: 10px;
+  background: #f1f1f1;
+  border-bottom: 1px solid #ddd;
 }
+
+.custom-dialog-body {
+  padding: 10px;
+}
+
+.custom-dialog.minimized {
+  width: 150px;
+  height: 40px;
+  overflow: hidden;
+}
+
+.custom-dialog.minimized .custom-dialog-body {
+  display: none;
+}
+
