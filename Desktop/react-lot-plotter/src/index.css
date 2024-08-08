@@ -11,11 +11,11 @@ body {
   position: fixed;
   top: 10%;
   right: 23%;
-  width: 50vw;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  width: 55vw;
+  background: #fcd116;
+  border: 0.2rem solid #fffefe;
+  box-shadow: 20px 4px 8px rgba(255, 255, 255, 0.1);
+
   z-index: 1001; /* Adjust to ensure it's above other content */
 }
 
@@ -23,15 +23,15 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  background: #f1f1f1;
-  border-bottom: 1px solid #ddd;
+  padding:0.3rem;
+  background: #fcd116;
+  border-bottom: 0.2rem solid #fafafa;
 }
 
 .custom-dialog-body {
-  padding: 10px;
+  padding: 0.2rem;
+ background-color: #fcd116;
 }
-
 .custom-dialog.minimized {
   width: 150px;
   height: 40px;
@@ -40,5 +40,17 @@ body {
 
 .custom-dialog.minimized .custom-dialog-body {
   display: none;
+}
+
+.select-tie-point{
+  background-color: #000000;
+  padding: 1rem;
+  color: white;
+  border: 0.3rem solid white;
+}
+.tie-point-bg{
+  background-color: #fcd116;
+  color: #000000;
+  border: 0.3rem solid rgb(255, 255, 255);
 }
 
