@@ -27,32 +27,35 @@ const PlotForm = ({ isMinimized, isShown, handleClose }) => {
   return (
     <div className={`custom-dialog`} style={{ display: isShown ? 'block' : 'none' }}>
       <div className="custom-dialog-header">
-        <h2>Plot</h2>
-        <i className="bi bi-x btn-danger btn btn-sm  " onClick={handleClose}></i>
+        <h2>Lot Plotter</h2>
+        <div className='custom-dialog-close'>
+        <i class="bi bi-x custom-btn" onClick={handleClose}></i>
+      
+        </div>
       </div>
       <div className="custom-dialog-body" style={{ display: isMinimized ? 'none' : 'block' }}>
-        <form className={`select-tie-point form-row`}>
-          <div className='form-row mt-2 p-2 border'>
-            <div className="row mb-4">
-              <div className="col-4 form-group">
+        <form className={`select-tie-point form-row row`}>
+          <div className='form-row mt-2 p-2 border col-6'>
+            <div className="col-12 mb-4">
+              <div className="col-12 form-group">
                 <label htmlFor="province" className="form-label">Province</label>
                 <select className="form-select" id="province">
                   <option value="">Select Province</option>
                 </select>
               </div>
-              <div className="col-4">
+              <div className="col-12">
                 <label htmlFor="municipality" className="form-label">Municipality</label>
                 <select className="form-select" id="municipality">
                   <option value="">Select Municipality</option>
                 </select>
               </div>
-              <div className="col-4">
+              <div className="col-12">
                 <label htmlFor="name" className="form-label">Name</label>
                 <input type="text" className="form-control" id="name" />
               </div>
             </div>
           </div>
-          <div className='form-row mt-2 p-2 border'>
+          <div className='form-row mt-2 p-2 border col-6'>
             <div className="row">
               <div className="mb-3">
                 <label htmlFor="csvFile" className="form-label">Upload a CSV formatted file (click to view format):</label>
@@ -73,7 +76,7 @@ const PlotForm = ({ isMinimized, isShown, handleClose }) => {
               <div>
                 {bearingDistances.map((bd, index) => (
                   <div key={index} className={`tie-point-bg`}>
-                    <div className="container text-center">
+                    <div className="container text-center border">
                       <div className="row g-2">
                         <div className="col">
                           <div className="p-2">Corner</div>

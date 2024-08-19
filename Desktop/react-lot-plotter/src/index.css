@@ -8,29 +8,62 @@ body {
 }
 
 .custom-dialog {
-  position: fixed;
-  top: 10%;
-  right: 23%;
-  width: 55vw;
-  background: #fcd116;
-  border: 0.2rem solid #fffefe;
-  box-shadow: 20px 4px 8px rgba(255, 255, 255, 0.1);
-
-  z-index: 1001; /* Adjust to ensure it's above other content */
+  position: absolute; /* Allows positioning anywhere on the screen */
+  top: 100%; /* Initial top position */
+  left: 5%; /* Initial right position */
+  width: 40vw; /* Width of the dialog */
+  background-color: #ffffff;
+  border-radius: 1rem; /* Rounded corners */
+  box-shadow: 10px 12px 8px rgba(0, 0, 0, 0.1); /* Adds shadow for a floating effect */
+  z-index: 1001; /* Ensures it appears on top of other elements */
+  cursor: move; /* Indicates that the element can be dragged */
 }
+
 
 .custom-dialog-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Center the title */
   align-items: center;
-  padding:0.3rem;
-  background: #fcd116;
-  border-bottom: 0.2rem solid #fafafa;
+  position: relative; /* Relative positioning for the close button */
+  padding: 0.3rem;
+  background: #1e325b;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  color: #ffffff;
 }
 
+.custom-dialog-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.custom-dialog-close {
+  position: absolute;
+  right: 10px;  
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  color: #ffca2c;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.3rem;
+}
+.custom-btn {
+  font-size: 2rem;
+  color: #ffca2c;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.custom-btn:hover {
+  color: #b3b2b2;
+  transform: scale(1.05);
+}
+
+
 .custom-dialog-body {
-  padding: 0.2rem;
- background-color: #fcd116;
+  padding: 1rem;
+  border-radius: 1rem;
+
 }
 .custom-dialog.minimized {
   width: 150px;
@@ -41,15 +74,7 @@ body {
 .custom-dialog.minimized .custom-dialog-body {
   display: none;
 }
-
-.select-tie-point{
-  background-color: #000000;
-  padding: 1rem;
-  color: white;
-  border: 0.3rem solid white;
-}
 .tie-point-bg{
-  background-color: #fcd116;
   color: #000000;
   border: 0.3rem solid rgb(255, 255, 255);
 }

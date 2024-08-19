@@ -17,26 +17,27 @@ const Controls = () => {
   };
 
   useEffect(() => {
-    const LotPlotter = L.control({ position: 'topright' });
+    const LotPlotter = L.control({ position: 'topleft' });
 
     LotPlotter.onAdd = function () {
       const div = L.DomUtil.create('div');
-      div.style.paddingTop = '100px';
+      div.style.paddingTop = '20px';
+    
+      div.style.paddingBottom = '10px';
 
       const root = ReactDOM.createRoot(div);
       root.render(
         <>
-          <button className="btn btn-secondary" onClick={() => setShowDialog(!showDialog)}>
+          <button className="btn btn-warning" onClick={() => setShowDialog(!showDialog)}>
             {showDialog && !isMinimized ? (
               <i className="bi bi-dash-circle"></i>
             ) : (
               <i className="bi bi-plus-circle"></i>
-            )} Plot
+            )} Lot Plotter
           </button>
           {showDialog && (
             <PlotForm
               isMinimized={isMinimized}
-    
               isShown={showDialog}
               handleClose={handleClose}
             />
