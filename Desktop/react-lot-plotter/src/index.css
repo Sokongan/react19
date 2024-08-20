@@ -8,15 +8,15 @@ body {
 }
 
 .custom-dialog {
-  position: absolute; /* Allows positioning anywhere on the screen */
-  top: 100%; /* Initial top position */
-  left: 5%; /* Initial right position */
-  width: 40vw; /* Width of the dialog */
+  position: absolute;
+  top: 100%;
+  left: 5%;
+  width: 40vw;
   background-color: #ffffff;
-  border-radius: 1rem; /* Rounded corners */
-  box-shadow: 10px 12px 8px rgba(0, 0, 0, 0.1); /* Adds shadow for a floating effect */
-  z-index: 1001; /* Ensures it appears on top of other elements */
-  cursor: move; /* Indicates that the element can be dragged */
+  border-radius: 1rem;
+  box-shadow: 10px 12px 8px rgba(0, 0, 0, 0.1); 
+  z-index: 1001;
+  cursor: move;
 }
 
 
