@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import PlotForm from './Form';
 
-const Controls = () => {
+const Controls = ({onFormSubmit}) => {
   const map = useMap();
   const [showDialog, setShowDialog] = useState(false);
   const [isMinimized,] = useState(false);
@@ -14,7 +14,7 @@ const Controls = () => {
 
   const handleClose = () => {
     setShowDialog(false);
-  };
+  }
 
   useEffect(() => {
     const LotPlotter = L.control({ position: 'topleft' });
@@ -40,6 +40,7 @@ const Controls = () => {
               isMinimized={isMinimized}
               isShown={showDialog}
               handleClose={handleClose}
+              onFormSubmit={onFormSubmit}
             />
           )}
         </>
@@ -53,7 +54,7 @@ const Controls = () => {
     return () => {
       LotPlotter.remove();
     };
-  }, [map, showDialog, isMinimized]);
+  }, [map, showDialog, isMinimized,onFormSubmit]);
 
   return null;
 };

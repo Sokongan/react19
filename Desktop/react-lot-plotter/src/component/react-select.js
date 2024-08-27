@@ -3,10 +3,12 @@ import Select, { components } from 'react-select';
 
 const ControlComponent = (props) => {
   const { selectProps } = props;
+
   const handleClick = (e) => {
     e.stopPropagation();
     selectProps.onIndicatorClick();
   }
+
   return(
     <div onClick={handleClick}>
     <components.Control {...props} />
@@ -14,7 +16,7 @@ const ControlComponent = (props) => {
   )
 }
 
-const SelectForm = ({ optionValue, selectedValue, onChangeEvent, clickEvent, menuState, inputRef }) => {
+const SelectForm = ({ optionValue, selectedValue, onChangeEvent,menuState, clickEvent, inputRef,placeHolder }) => {
 
   return (
     <Select
@@ -26,6 +28,7 @@ const SelectForm = ({ optionValue, selectedValue, onChangeEvent, clickEvent, men
       onClick={clickEvent}
       onIndicatorClick={clickEvent}
       ref={inputRef}
+      placeholder={placeHolder}
       isSearchable 
     />
   );
