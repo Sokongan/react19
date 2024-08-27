@@ -14,6 +14,7 @@ const LotPlotter = () => {
         />
         <Controls/>
       </MapContainer>
+     
     </div>
   );
 };

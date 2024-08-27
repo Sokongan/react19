@@ -6,6 +6,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.Select-menu {
+  position: fixed !important;
+}
 
 .custom-dialog {
   position: absolute;
@@ -18,7 +21,6 @@ body {
   z-index: 1001;
   cursor: move;
 }
-
 
 .custom-dialog-header {
   display: flex;

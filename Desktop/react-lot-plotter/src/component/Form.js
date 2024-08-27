@@ -1,27 +1,76 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getRequest } from '../api/config';
+import SelectForm from '../component/react-select'
+
 
 const PlotForm = ({ isMinimized, isShown, handleClose }) => {
-  const [provinces,setProvinces] = useState([]);
+
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const inputRef = useRef(''); 
+
+  const handleIndicatorClick = () => {
+    setMenuIsOpen((prevOpen) => !prevOpen);
+    if (!menuIsOpen && inputRef.current) {
+      const selectEl = inputRef.current;
+    if (!selectEl) return;
+    if (menuIsOpen) selectEl.blur();
+    else selectEl.focus();
+    }
+  };
+
+  const [provinces, setProvinces] = useState([]);
+  const [selectedProvince, setSelectedProvince] = useState(''); // Use null for initial selection
+
   const [municipalities, setMunicipalities] = useState([]);
+  const [selectedMunicipality, setSelectedMunicipality] = useState('');
+
+  const [tiePoints, setTiePoints] = useState([]);
+  const [selectedTiePoint, setSelectedTiePoint] = useState('');
   const [bearingDistances, setBearingDistances] = useState([]);
 
   useEffect(() => {
-  
-    const fetchData = async () => {
+    async function fetchData() {
       try {
-        const provincesResponse = await getRequest('/provinces'); 
-        const municipalitiesResponse = await getRequest('/municipalities');
-
-        setProvinces(provincesResponse.data)
-        setMunicipalities(municipalitiesResponse.data);
+        const response = await getRequest('provinces');
+        const formattedProvinces = response.data.map(i => ({
+          value: i,
+          label: i,
+        }));
+        setProvinces(formattedProvinces);
+      
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching provinces:', error);
       }
-    };
-
+    }
     fetchData();
   }, []);
+
+  const handleProvinceChange = (provinces) => {
+   setSelectedProvince(provinces)
+   setMenuIsOpen(false);
+};
+
+  const handleMunicipalityChange = async (event) => {
+    setSelectedMunicipality(event.target.value); 
+    try {
+      const tiePointResponse = await getRequest('/?search&provinces=' + selectedProvince + '&municipality=' + event.target.value);
+      setTiePoints(tiePointResponse.data.map(tiePoint => ({
+        value: tiePoint.id,
+        label: tiePoint.tie_pt_name,
+      })));
+      console.log(tiePointResponse)
+    
+    } catch (error) {
+      console.error('Error fetching tie points:', error);
+    }
+  };
+
+  const handleTiePointsChange = (event) => {
+    setSelectedTiePoint(event.target.value);
+    setMenuIsOpen()
+  };
+
+
 
   const handleAddCorner = () => {
     setBearingDistances([...bearingDistances, { bearing: '', distance: '' }]);
@@ -58,25 +107,68 @@ const PlotForm = ({ isMinimized, isShown, handleClose }) => {
             <div className="col-12 mb-4">
               <div className="col-12 form-group">
                 <label htmlFor="province" className="form-label">Province</label>
-                <select className="form-select mb-2" id="province">
-                  <option value="">Select Province</option>
-                  {provinces.map((province, index) => (
-    <option key={index} value={province}>{province}</option>
-  ))}
-                </select>
+               
+            <SelectForm optionValue={provinces}
+             selectedValue={selectedProvince}
+              onChangeEvent={handleProvinceChange}
+               clickEvent={handleIndicatorClick}
+                inputRef={inputRef} 
+                menuState={menuIsOpen}/>
+              {/* // 
+              // onChangeEvent={handleProvinceChange}
+              // state={menuIsOpen} */}
+            
+      
+                          {/* <select className="form-select mb-2"
+                              onChange={handleProvinceChange}>
+            {provinces.map(({ label, value }) => (
+              <option value={label} key={value}> 
+                {label}
+              </option>
+            ))}
+          </select> */}
+                {/* <select className="form-select mb-2" id="province"
+                value={selectedProvince}
+                onChange={handleProvinceChange}
+              >
+                <option value="">Select Province</option>
+                {provinces.map((province, index) => (
+                  <option key={index} value={province.value}>{province.label}</option>
+                ))}
+              </select> */}
               </div>
               <div className="col-12">
                 <label htmlFor="municipality" className="form-label">Municipality</label>
-                <select className="form-select mb-2" id="municipality">
-                  <option value="">Select Municipality</option>
-                  {municipalities.map((municipality,index) => (
-                    <option key={index} value={municipality}>{municipality}</option>
-                  ))}
-                </select>
+                <select className="form-select mb-2" id="municipality"
+                value={selectedMunicipality}
+                onChange={handleMunicipalityChange}
+              >
+                <option value="">Select Municipality</option>
+                {municipalities.map((municipality, index) => (
+                  <option key={index} value={municipality}>{municipality}</option>
+                ))}
+              </select>
               </div>
               <div className="col-12">
-                <label htmlFor="name" className="form-label">Tie Point Name</label>
-                <input type="text" className="form-control" id="name" />
+                <label htmlFor="tiepoints" className="form-label">Tie Point Name</label>
+                {/* <Select
+                options={filteredTiePoints}
+                value={selectedTiePoint}
+                onChange={handleChange}
+                onInputChange={handleSearch} // Trigger search on input change
+                placeholder="Search Tie Points..."
+              /> */}
+      
+                <select className="form-select mb-2" id="province"
+                value={selectedTiePoint}
+                onChange={handleTiePointsChange}
+              >
+                <option value="">Select Tie Points Name</option>
+                {tiePoints.map((tp,index) => (
+                  <option key={index} value={tp.value}>{tp.label}</option>
+                ))}
+              </select>
+    
               </div>
             </div>
           </div>
