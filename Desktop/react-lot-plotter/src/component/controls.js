@@ -16,6 +16,31 @@ const Controls = ({ onFormSubmit }) => {
   }
 
   useEffect(() => {
+    if (showDialog) {
+      map.scrollWheelZoom.disable();
+      map.dragging.disable();
+      map.doubleClickZoom.disable();
+      map.touchZoom.disable();
+      map.boxZoom.disable();
+    } else {
+      map.scrollWheelZoom.enable();
+      map.dragging.enable();
+      map.doubleClickZoom.enable();
+      map.touchZoom.enable();
+      map.boxZoom.enable();
+    }
+  
+    return () => {
+      map.scrollWheelZoom.enable();
+      map.dragging.enable();
+      map.doubleClickZoom.enable();
+      map.touchZoom.enable();
+      map.boxZoom.enable();
+    };
+  }, [map, showDialog]);
+  
+
+  useEffect(() => {
     const LotPlotter = L.control({ position: 'topleft' });
 
     LotPlotter.onAdd = function () {
@@ -54,19 +79,8 @@ const Controls = ({ onFormSubmit }) => {
     };
   }, [map, showDialog, isMinimized, onFormSubmit]);
 
-  // Enable or disable scrollWheelZoom based on showDialog state
-  useEffect(() => {
-    if (showDialog) {
-      map.scrollWheelZoom.disable();
-    } else {
-      map.scrollWheelZoom.enable();
-    }
+ 
 
-    // Clean up function to re-enable scrollWheelZoom when component unmounts
-    return () => {
-      map.scrollWheelZoom.enable();
-    };
-  }, [map, showDialog]);
 
   return null;
 };

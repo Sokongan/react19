@@ -75,6 +75,7 @@ body {
 
 .custom-dialog.minimized .custom-dialog-body {
   display: none;
+  pointer-events: none;
 }
 .tie-point-bg{
   color: #000000;
