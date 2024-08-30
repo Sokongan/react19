@@ -1,7 +1,10 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-    baseURL: process.env.REACT_APP_ENDPOINT,
+  baseURL: process.env.REACT_APP_ENDPOINT,
+  headers: {
+      'lra-api-key': process.env.REACT_APP_API_KEY
+  }
 });
 
 

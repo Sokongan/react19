@@ -3,7 +3,10 @@ import { getRequest } from '../api/config';
 import SelectForm from '../component/react-select'
 
 
-const PlotForm = ({ isMinimized, isShown, handleClose, onFormSubmit }) => {
+
+const PlotForm = ({ isMinimized, isShown, handleClose, onFormSubmit,  }) => {
+
+
 
   const [provinces, setProvinces] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState(''); 

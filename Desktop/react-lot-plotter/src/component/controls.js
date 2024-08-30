@@ -6,11 +6,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import PlotForm from './Form';
 
-const Controls = ({onFormSubmit}) => {
+const Controls = ({ onFormSubmit }) => {
   const map = useMap();
   const [showDialog, setShowDialog] = useState(false);
   const [isMinimized,] = useState(false);
-
 
   const handleClose = () => {
     setShowDialog(false);
@@ -22,7 +21,6 @@ const Controls = ({onFormSubmit}) => {
     LotPlotter.onAdd = function () {
       const div = L.DomUtil.create('div');
       div.style.paddingTop = '20px';
-    
       div.style.paddingBottom = '10px';
 
       const root = ReactDOM.createRoot(div);
@@ -54,7 +52,21 @@ const Controls = ({onFormSubmit}) => {
     return () => {
       LotPlotter.remove();
     };
-  }, [map, showDialog, isMinimized,onFormSubmit]);
+  }, [map, showDialog, isMinimized, onFormSubmit]);
+
+  // Enable or disable scrollWheelZoom based on showDialog state
+  useEffect(() => {
+    if (showDialog) {
+      map.scrollWheelZoom.disable();
+    } else {
+      map.scrollWheelZoom.enable();
+    }
+
+    // Clean up function to re-enable scrollWheelZoom when component unmounts
+    return () => {
+      map.scrollWheelZoom.enable();
+    };
+  }, [map, showDialog]);
 
   return null;
 };
