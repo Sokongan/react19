@@ -1,0 +1,8 @@
+model Role {
+  id          String       @id @default(cuid())
+  type        String       @unique
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  permissions Permission[] @relation("RolePermission")
+  users       User[]       @relation("UserRoles")
+}
