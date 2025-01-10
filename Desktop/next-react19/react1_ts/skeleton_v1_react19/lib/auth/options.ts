@@ -21,8 +21,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           const user = await prisma.user.findUnique({
             where: { username: username },
-            include: { roles: true },
-          });
+            include: { 
+              roles: {
+                  include:{
+                    role_types:{
+                      select:{name:true}
+                    },
+                    permissions:{
+                      select:{type:true}
+                    }
+                  }
+                  
+              } 
+          }});
   
           if (!user) {
             return null;
@@ -32,12 +43,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (!isPasswordValid) {
             return null;
           }
+          
+      
           return {
             id: user.id,
             username: user.username,
             first_name: user.first_name,
             last_name: user.last_name,
-            roles: user.roles.map((role: { type: string }) => role.type)
+            roles: user.roles
           };
       
         }
@@ -55,30 +68,29 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return !!auth;
     },
     signIn({user}) {
-      console.log("Sign In CallBack user id",user.id)
+      console.log("Sign In CallBack user id",user)
       console.log("Sign In CallBack username",user.username)
       return true
     },
     jwt({ token, user }) {
       if (user) {
+        console.log(user)
         token.username = user.username;
         token.first_name = user.first_name;
         token.last_name = user.last_name;
         token.roles = user.roles;
       }
-      console.log("Token:",token)
+    
       return token;
     },
     session({ session, token }) {
       if (token) {
-      
         session.user.id = token.sub??'';
         session.user.username = token.username;
         session.user.first_name = token.first_name;
         session.user.last_name = token.last_name;
         session.user.roles = token.roles;
       }
-      console.log("session:",session)
       return session;
     }
   },

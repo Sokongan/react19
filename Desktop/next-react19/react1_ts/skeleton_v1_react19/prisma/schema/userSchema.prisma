@@ -1,0 +1,64 @@
+model User {
+  id          String        @id @default(cuid())
+  username    String        @unique
+  password    String
+  email       String
+  first_name  String
+  middle_name String?
+  last_name   String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  roles       Role[]
+  Session     Session[]
+  AccessLog   AccessLog[]
+}
+
+model Role {
+  id          String        @id @default(cuid())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  permissions Permission[]  @relation("RolePermissions")
+  role_types  RoleType[]    @relation("RoleTypes")
+  User User[]
+}
+
+model Permission {
+  id        String   @id @default(cuid())
+  type      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  roles     Role[]   @relation("RolePermissions")
+}
+
+model RoleType {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  roles     Role[]   @relation("RoleTypes")
+}
+
+// model UserRole {
+//   id        String   @id @default(cuid())
+//   userId    String
+//   roleId    String
+//   user      User     @relation(fields: [userId], references: [id])
+//   role      Role     @relation(fields: [roleId], references: [id])
+//   createdAt DateTime @default(now())
+//   userRoles User[] @relation("UserRoles") // User's roles
+//   roleRoles Role[] @relation("RoleUserRoles") // Role's users
+// }
+
+model Session {
+  id           String     @id @default(cuid())
+  sessionToken String     @unique
+  userId       String
+  expires      DateTime
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AccessLog {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String
+  timestamp DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}

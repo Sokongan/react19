@@ -1,89 +1,86 @@
 import { hash } from "bcryptjs";
+
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-async function main() {
-  const createPermission = await prisma.permission.create({
-    data: { type: 'create_user' },
-  });
+async function seed() {
+  // Create Permissions
+  const permissions = [
+    { type: "user.create" },
+    { type: "user.view" },
+    { type: "user.update" },
+    { type: "user.delete" },
+  ];
 
-  const readPermission = await prisma.permission.create({
-    data: { type: 'read_user' },
-  });
+  const createdPermissions = await Promise.all(
+    permissions.map((permission) => prisma.permission.create({ data: permission }))
+  );
 
-  const updatePermission = await prisma.permission.create({
-    data: { type: 'update_user' },
-  });
+  const roleTypes = [
+    { name: "admin" },
+    { name: "user" },
+  ];
 
-  const deletePermission = await prisma.permission.create({
-    data: { type: 'delete_user' },
-  });
-
-  // Create roles and assign permissions
+  const createdRoleTypes = await Promise.all(
+    roleTypes.map((roleType) => prisma.roleType.create({ data: roleType }))
+  );
   const adminRole = await prisma.role.create({
     data: {
-      type: 'admin',
       permissions: {
-        connect: [
-          { id: createPermission.id },
-          { id: readPermission.id },
-          { id: updatePermission.id },
-          { id: deletePermission.id },
-        ],
+        connect: createdPermissions.map((permission) => ({ id: permission.id }))
       },
-    },
+      role_types: {
+        connect: [{ id: createdRoleTypes[0].id }] // Assuming 'admin' is the first role type
+      }
+    }
   });
 
   const userRole = await prisma.role.create({
     data: {
-      type: 'user',
       permissions: {
-        connect: [
-          { id: readPermission.id },
-        ],
+        connect: createdPermissions.filter(permission => permission.type === 'user.view').map((permission) => ({ id: permission.id }))
       },
-    },
+      role_types: {
+        connect: [{ id: createdRoleTypes[1].id }] // Assuming 'user' is the second role type
+      }
+    }
   });
-
-  // Create a sample user
-  await prisma.user.create({
-    data: {
-      username: 'admin',
-      email: 'admin@example.com',
-      password: await hash('password',10), // Ensure this is hashed in real scenarios
-      first_name: 'Admin',
-      last_name: 'Admin',
-      active: true,
-      roles:{ 
-        connect: [
-        { id: adminRole.id },
-      ],},
-    },
-  });
-
-  await prisma.user.create({
-    data: {
-      username: 'user',
-      email: 'user@example.com',
-      password: await hash('password',10), // Ensure this is hashed in real scenarios
-      first_name: 'User',
-      last_name: 'User',
-      active: true,
+  console.log(adminRole.id)
+  console.log(userRole.id)
+  // Create Users with connected roles
+  const users = [
+    {
+      username: "admin",
+      email: "admin@example.com",
+      password: await hash("password", 10),
+      first_name: "Admin",
+      last_name: "Admin",
+      middle_name: null,
       roles: {
-        connect: [
-          { id: userRole.id },
-        ],
-      },
+        connect: [{ id: adminRole.id }]
+      }
     },
-  });
+    {
+      username: "user",
+      email: "user@example.com",
+      password: await hash("password", 10),
+      first_name: "User",
+      last_name: "User",
+      middle_name: null,
+      roles: {
+        connect: [{ id: userRole.id }]
+      }
+    }
+  ];
 
-  console.log('Seeding complete.');
+  await Promise.all(users.map((user) => prisma.user.create({ data: user })));
+
+  console.log("Seeding complete.");
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
+seed()
+  .catch((error) => {
+    console.error(error);
   })
   .finally(async () => {
     await prisma.$disconnect();

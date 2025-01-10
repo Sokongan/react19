@@ -4,11 +4,10 @@ import { auth } from "./lib/auth/options"
 
 const protectedRoutes = ["/dashboard", "/suggestions"] // Define your protected routes
 
-export default auth((req) => {
+export default auth(async (req) => {
   const isLoggedIn = !!req.auth
   const isProtectedRoute = protectedRoutes.includes(req.nextUrl.pathname)
 
-  // If user is not logged in and trying to access a protected route or any route other than '/login'
   if (!isLoggedIn && req.nextUrl.pathname !== "/login") {
     const loginUrl = new URL("/login", req.nextUrl.origin)
     return NextResponse.redirect(loginUrl)
