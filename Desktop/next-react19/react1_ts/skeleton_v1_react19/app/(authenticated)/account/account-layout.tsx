@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form"
 import { UserFormSchema, userUpdateSchema } from "@/zod/schemas/userSchema"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { Label } from "@/components/ui/label"
 
 
 
@@ -38,8 +39,13 @@ export default function ProfileForm() {
   }
   return (
 
-      <div>
-        <Form {...form}>
+      <div className="grid grid-cols-2">
+           <div>
+              <h1>User Information</h1>
+              <Label>View and update your personal details and account information.</Label>
+           </div>
+           <div className=" ">
+           <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
           {/* <div className="max-w-sm rounded overflow-hidden shadow-lg">
             <div className="px-6 pt-6 pb-6 py-6"> */}
@@ -143,9 +149,9 @@ export default function ProfileForm() {
             <Separator/>
             <Button type="submit">Submit</Button>
           </form>
+        </Form>
+           </div>
+      </div>
      
-      </Form>
-  </div>
-  
   );
 }
