@@ -20,20 +20,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const { username, password } = await signInSchema.parseAsync(credentials)
 
           const user = await prisma.user.findUnique({
-            where: { username: username },
-            include: { 
+            where: { username: username},
+            include: {
               roles: {
-                  include:{
-                    role_types:{
-                      select:{name:true}
-                    },
-                    permissions:{
-                      select:{type:true}
-                    }
-                  }
-                  
-              } 
-          }});
+                include: {
+                  role_types: { select: { name: true } },
+                  permissions: { select: { type: true } },
+                },
+              },
+            },
+          });
   
           if (!user) {
             return null;
@@ -44,13 +40,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             return null;
           }
           
-      
+    
           return {
             id: user.id,
             username: user.username,
             first_name: user.first_name,
             last_name: user.last_name,
-            roles: user.roles
+            roles: user.roles.map(role => ({
+              role_type: role.role_types.map(role_type => role_type.name),
+              permissions: role.permissions.map(permission => permission.type)
+            }))
           };
       
         }
@@ -68,13 +67,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return !!auth;
     },
     signIn({user}) {
-      console.log("Sign In CallBack user id",user)
-      console.log("Sign In CallBack username",user.username)
+      console.log(user)
       return true
     },
     jwt({ token, user }) {
       if (user) {
-        console.log(user)
         token.username = user.username;
         token.first_name = user.first_name;
         token.last_name = user.last_name;
@@ -96,7 +93,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   pages:{
     signIn:'/login',
-    signOut:'/logout'
   }
 })
 

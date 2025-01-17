@@ -6,22 +6,28 @@ declare module "next-auth" {
  * The shape of the user object returned in the OAuth providers' `profile` callback,
  * or the second parameter of the `session` callback, when using a database.
  */
-  interface User {
-    id:string | null
-    username:string
-    first_name:string
-    last_name:string
-    roles:Array
+
+  interface Role {
+    role_type: string[];
+    permissions: string[];
   }
 
 
+  interface User {
+    id:string
+    username:string
+    first_name:string
+    last_name:string
+    roles: Role[];
+  }
+
   interface Session {
     user: {
-      id:string | null
+      id:string
       username:string
       first_name:string
       last_name:string
-      roles:Array
+      roles: Role[];
     } & DefaultSession["user"]
   }
 }
@@ -35,6 +41,6 @@ declare module "next-auth/jwt" {
     username:string
     first_name:string
     last_name:string
-    roles:Array
+    roles: Role[];
   }
 }

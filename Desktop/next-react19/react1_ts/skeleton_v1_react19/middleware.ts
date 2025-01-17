@@ -1,27 +1,29 @@
+import { NextResponse } from "next/server";
+import { auth } from "./lib/auth/options";
 
-import { NextResponse } from "next/server"
-import { auth } from "./lib/auth/options"
-
-const protectedRoutes = ["/dashboard", "/suggestions"] // Define your protected routes
+const protectedRoutes = ["/dashboard", "/profile"]; // Define your protected routes
 
 export default auth(async (req) => {
-  const isLoggedIn = !!req.auth
-  const isProtectedRoute = protectedRoutes.includes(req.nextUrl.pathname)
+  const isLoggedIn = !!req.auth;
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    req.nextUrl.pathname.startsWith(route)
+  );
 
-  if (!isLoggedIn && req.nextUrl.pathname !== "/login") {
-    const loginUrl = new URL("/login", req.nextUrl.origin)
-    return NextResponse.redirect(loginUrl)
-  }
-
-  // If the user tries to access a protected route but is not logged in, redirect them to '/'
+  // Redirect unauthenticated users from protected routes to login
   if (isProtectedRoute && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/", req.nextUrl.origin))
+    return NextResponse.redirect(new URL("/login", req.nextUrl.origin));
   }
 
-  // Allow the request to continue
-  return NextResponse.next()
-})
+  // Ensure logged-in users see `/` as the default page (Dashboard Content)
+  if (isLoggedIn && req.nextUrl.pathname === "/login") {
+    return NextResponse.redirect(new URL("/", req.nextUrl.origin));
+  }
+
+  // Allow the request to proceed
+  return NextResponse.next();
+});
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"], // Match all routes except api, static assets, and images
-}
+  // Match all routes except static assets and APIs
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+};
